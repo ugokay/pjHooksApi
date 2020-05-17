@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
     res.send('MainCats');
     // console.log('asdad');
 })
-
+// Genel route convnsiyonuna uygun olarak kurgula
 router.post('/', (req,res) => {
     console.log(req.body)
 })

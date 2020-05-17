@@ -2,7 +2,7 @@ const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
 const port = 3000
-
+require('dotenv/config');
 
 //TODO
 // auto mail system 
@@ -18,10 +18,20 @@ const port = 3000
 
 // connect to db
 
-// mongoose.connect('mongodb+srv://cluster0-4deyo.mongodb.net/test',
-//     {useNewUrlParser: true}, () => {
-//     console.log('connected To DB')
-// })
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true },
+    () =>  console.log('connected To DB') 
+);
+
+
+
+// mongoose.connect('mongodb+srv://gokay:<Zy886565>@cluster0-4deyo.mongodb.net/test?retryWrites=true&w=majority', 
+//     {useNewUrlParser: true}, function(err) {
+//         if(err) {
+//             console.log('Some problem with the connection ' +err);
+//         } else {
+//             console.log('The Mongoose connection is ready');
+//         }
+//     })
 
 
 
