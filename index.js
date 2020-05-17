@@ -1,9 +1,13 @@
 const express = require('express')
 const app = express()
 const mongoose = require('mongoose')
+const bodyParser = require('body-parser');
 const port = 3000
 require('dotenv/config');
 
+
+
+app.use(bodyParser.json());
 //TODO
 // auto mail system 
 // healthcheckmonitor mails 
