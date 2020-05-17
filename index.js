@@ -6,6 +6,24 @@ const port = 3000
 require('dotenv/config');
 
 
+mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true },
+    () =>  console.log('connected To DB') 
+);
+
+
+// mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true});
+
+// const Cat = mongoose.model('Cat', { name: String });
+
+// const kitty = new Cat({ name: 'Zildjian' });
+// kitty.save().then(() => {
+//     console.log('meow')
+// }).catch(err => {
+//     res.json( {message: err} )
+// });
+
+
+
 
 app.use(bodyParser.json());
 //TODO
@@ -22,9 +40,7 @@ app.use(bodyParser.json());
 
 // connect to db
 
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true },
-    () =>  console.log('connected To DB') 
-);
+
 
 
 
@@ -45,7 +61,6 @@ app.get('/', (req, res) => res.send('Hello Waa121nad!'))
 
 // Import routes
 const category = require('./routes/category') 
-
 app.use('/main-categories', category)
 
 // app.get('/main-categories', (req, res) => {
