@@ -6,9 +6,11 @@ const express = require('express'),
   var mysql = require('mysql')
 
 // TODO 
-// Authentication
-// category.UPDATE
-
+// 1.Authentication dotnetEnv
+// 2.category.UPDATE
+// 3.getNestedCategories => tüm kategoriler için
+// 4. getCategoryFeatures ürün eklerken vs görüntülenmesi için gerkeecek 
+// 5. categoryFeatures => update, delete
 
   var connection = mysql.createConnection({
     host: 'localhost',
