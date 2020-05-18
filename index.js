@@ -1,72 +1,129 @@
-const express = require('express')
-const app = express()
-const mongoose = require('mongoose')
-const bodyParser = require('body-parser');
-const port = 3000
-require('dotenv/config');
+const express = require('express'),
+  app = express(),
+  bodyParser = require('body-parser');
+  port = process.env.PORT || 3001;
+
+  var mysql = require('mysql')
+
+// TODO 
+// Authentication
+// category.UPDATE
 
 
-mongoose.connect(process.env.DB_CONNECTION, { useNewUrlParser: true },
-    () =>  console.log('connected To DB') 
-);
+  var connection = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'pj_hooks'
+  })
+
+connection.connect(function(err) {
+    if (err) throw err;
+});
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+var routes = require('./routes/appRoutes'); //importing route
+routes(app); //register the route
 
 
-// mongoose.connect(process.env.DB_CONNECTION, {useNewUrlParser: true, useUnifiedTopology: true});
 
-// const Cat = mongoose.model('Cat', { name: String });
 
-// const kitty = new Cat({ name: 'Zildjian' });
-// kitty.save().then(() => {
-//     console.log('meow')
-// }).catch(err => {
-//     res.json( {message: err} )
+
+
+
+// const str = "{['KEY':'val'  ]}"
+
+// app.get('/a', (req,res) => {
+
+//     res.send(str);
+// })
+
+
+
+
+
+
+// // Middlewares
+// // app.use('/main-categories', () => {
+// //     console.log('auth falan buraya gelebilir')
+// // })
+
+// // const category = require('./routes/category') 
+// // app.use('/main-categories', category)
+
+
+
+// app.get('/', (req, res) => {
+    
+//     // res.send('Hello Waa1211nad!')
+
+//     mc.query("Select * from category", function (err, resu) {
+
+//         if(err) {
+//             console.log("error: ", err);
+//             // res.json({null : err});
+//         }
+//         else{
+//           // console.log({'tasks : ': resu});  
+//         //   res.setHeader('Content-Type', 'application/json');
+//           res.send(resu);
+
+
+//         //  res.json({null :res});
+//         }
+//     });   
+
+
 // });
 
 
+// // connection.end()
+
+// //TODO
+// // auto mail system 
+// // healthcheckmonitor mails 
+
+// //Middlewares
+// // app.use('/main-categories', () => {
+// //     console.log('auth falan buraya gelebilir')
+// // })
+// // or 
+// // app.use(auth)
 
 
-app.use(bodyParser.json());
-//TODO
-// auto mail system 
-// healthcheckmonitor mails 
-
-//Middlewares
-// app.use('/main-categories', () => {
-//     console.log('auth falan buraya gelebilir')
-// })
-// or 
-// app.use(auth)
-
-
-// connect to db
-
-
+// // connect to db
 
 
 
-// mongoose.connect('mongodb+srv://gokay:<Zy886565>@cluster0-4deyo.mongodb.net/test?retryWrites=true&w=majority', 
-//     {useNewUrlParser: true}, function(err) {
-//         if(err) {
-//             console.log('Some problem with the connection ' +err);
-//         } else {
-//             console.log('The Mongoose connection is ready');
-//         }
-//     })
+
+
+// // mongoose.connect('mongodb+srv://gokay:<Zy886565>@cluster0-4deyo.mongodb.net/test?retryWrites=true&w=majority', 
+// //     {useNewUrlParser: true}, function(err) {
+// //         if(err) {
+// //             console.log('Some problem with the connection ' +err);
+// //         } else {
+// //             console.log('The Mongoose connection is ready');
+// //         }
+// //     })
 
 
 
-// ROUTES
-app.get('/', (req, res) => res.send('Hello Waa121nad!'))
+// // // ROUTES
+// // app.get('/', (req, res) => res.send('Hello Waa121nad!'))
 
 
-// Import routes
-const category = require('./routes/category') 
-app.use('/main-categories', category)
+// // // Import routes
+// // const category = require('./routes/category') 
+// // app.use('/main-categories', category)
 
-// app.get('/main-categories', (req, res) => {
+// // // app.get('/main-categories', (req, res) => {
 
-//     res.send('sadaaasad');
-// })
+// // //     res.send('sadaaasad');
+// // // })
 
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`))
+
+connection.end();
