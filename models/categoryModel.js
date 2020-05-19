@@ -9,6 +9,7 @@ var Category = function(cat){
     this.title_ru = cat.title_ru;
     this.descr_ru = cat.descr_ru;
     this.mainCategoryId = cat.mainCategoryId;
+    this.categoryOrder = cat.categoryOrder;
     this.status = true;
 };
 Category.createCategory = function (cat, result) {    
