@@ -12,6 +12,7 @@ var Category = function(cat){
     this.categoryOrder = cat.categoryOrder;
     this.status = true;
 };
+
 Category.createCategory = function (cat, result) {    
         sql.query("INSERT INTO category set ?", cat, function (err, res) {
                 if(err) {
