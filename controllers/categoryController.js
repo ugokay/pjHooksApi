@@ -13,6 +13,17 @@ exports.list_all_categories = function(req, res) {
   });
 };
 
+exports.list_sub_categories_by_id = function(req, res){
+  Category.getSubCategories(req.params.taskId, function( err, task) {
+
+    if (err)
+      res.send(err);
+      console.log('res', task);
+    res.send(task);
+    
+  });
+};
+
 exports.create_a_category = function(req, res) {
 
   var new_cat = new Category(req.body);

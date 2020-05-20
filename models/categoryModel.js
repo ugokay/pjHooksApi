@@ -41,6 +41,20 @@ Category.getAllCategories = function (result) {
         });   
 };
 
+Category.getSubCategories = function (id, result){
+    sql.query("SELECT * from category WHERE mainCategoryId = ?", [id], function (err,res){
+
+        if(err) {
+            console.log("error: ", err);
+            result(null, err);
+        }
+        else{
+         result(null, res);
+        }
+
+    })
+}
+
 Category.remove = function(id, result){
      sql.query("UPDATE category set status = 0 WHERE id = ?", [id], function (err, res) {
 
