@@ -13,8 +13,8 @@ module.exports = function(app) {
    app.route('/categories/:taskId')
     // TODO // .get(cats.read_a_task) // getProductsByCategoryId
     .get(cats.list_sub_categories_by_id)
-    // .put(cats.update_a_category)
-    .put(cats.delete_a_category);
+    .put(cats.update_a_category)
+    // .put(cats.delete_a_category);
    
 
 

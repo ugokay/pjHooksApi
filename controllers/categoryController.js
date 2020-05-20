@@ -50,13 +50,14 @@ exports.delete_a_category = function(req, res) {
 };
 
 
-// exports.update_a_category = function(req, res) {
-//   Category.updateById(req.params.taskId, new Task(req.body), function(err, task) {
-//     if (err)
-//       res.send(err);
-//     res.json(task);
-//   });
-// };
+exports.update_a_category = function(req, res) {
+  // console.log(req);
+  Category.updateById(req.params.taskId, new Category(req.body), function(err, task) {
+    if (err)
+      res.send(err);
+    res.json(task);
+  });
+};
 
 // exports.read_a_task = function(req, res) {
 //   Task.getTaskById(req.params.taskId, function(err, task) {
