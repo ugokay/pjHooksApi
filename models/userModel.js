@@ -28,6 +28,19 @@ User.createUser = function(usr, result){
     });
 };
 
+User.getAllUSers = function(result){
+
+    sql.query("Select * from user", function (err, res) {
+
+        if(err) {
+            console.log("error: ", err);
+            result(null, err);
+        }
+        else{
+         result(null, res);
+        }
+    });  
+}
 
 
 module.exports = User;

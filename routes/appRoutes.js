@@ -45,6 +45,12 @@ module.exports = function(app) {
       .post(us.create_a_user);
 
 
+    app.route('/users')
+      .get(us.get_all_users);
+
+
+
+
 
     };
     // c'est fini
