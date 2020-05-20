@@ -3,6 +3,7 @@ module.exports = function(app) {
   var cats = require('../controllers/categoryController');
   var cf = require('../controllers/categoryFeaturesController');
   var pr = require('../controllers/productController');
+  var us = require('../controllers/usersController');
 
   // Categories Routes
   app.route('/categories')
@@ -15,7 +16,6 @@ module.exports = function(app) {
     // .put(cats.update_a_category)
     .put(cats.delete_a_category);
    
-
 
 
     // Categories Features Routes
@@ -36,6 +36,13 @@ module.exports = function(app) {
     //ProductById
     app.route('/products/:productId')
       .get(pr.list_products_by_category_id);
+
+    //getUserDetail
+    //createUser
+    //listUsers
+    //putUser
+    app.route('/user')
+      .post(us.create_a_user);
 
 
 
