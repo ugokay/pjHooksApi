@@ -44,6 +44,8 @@ module.exports = function(app) {
     app.route('/user')
       .post(us.create_a_user);
 
+    app.route('/user/:id')
+      .get(us.get_user_by_id);
 
     app.route('/users')
       .get(us.get_all_users);

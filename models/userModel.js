@@ -11,6 +11,7 @@ var User = function (usr){
     this.eMail = usr.eMail;
     this.password = usr.password;
     this.phoneNumber = usr.phoneNumber;
+    this.status = usr.status;
 };
 
 User.createUser = function(usr, result){
@@ -41,6 +42,24 @@ User.getAllUSers = function(result){
         }
     });  
 }
+
+
+
+
+User.GetUserById = function(id,result){
+
+    sql.query("SELECT * FROM user where id = ?", id, function(err,res){
+
+        if(err) {
+            console.log("error: ", err);
+            result(null, err);
+        }
+        else{
+         result(null, res);
+            // console.log(res);
+        }
+    })
+};
 
 
 module.exports = User;

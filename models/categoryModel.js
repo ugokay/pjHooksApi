@@ -27,15 +27,14 @@ Category.createCategory = function (cat, result) {
 };
 
 Category.getAllCategories = function (result) {
-    sql.query("Select * from category WHERE status = 1", function (err, res) {
+    sql.query("Select * from category WHERE status = 1 ", function (err, res) {
 
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
             }
             else{
-              console.log('tasks : ', res);  
-
+            //   console.log('tasks : ', res);  
              result(null, res);
             }
         });   
@@ -69,16 +68,16 @@ Category.remove = function(id, result){
             }); 
 };
 
-    Category.updateById = function(id, task, result){
-        sql.query("UPDATE category SET category = ? WHERE id = ?", [task, id], function (err, res) {
-                if(err) {
-                    console.log("error: ", err);
-                      result(null, err);
-                   }
-                 else{   
-                   result(null, res);
-                      }
-                  }); 
+Category.updateById = function(id, task, result){
+    sql.query("UPDATE category SET category = ? WHERE id = ?", [task, id], function (err, res) {
+            if(err) {
+                console.log("error: ", err);
+                    result(null, err);
+                }
+                else{   
+                result(null, res);
+                    }
+                }); 
 
 // //   sql.query("UPDATE tasks SET task = ? WHERE id = ?", [task.task, id], function (err, res) {
 // //           if(err) {

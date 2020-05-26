@@ -5,6 +5,7 @@ var User = require('../models/userModel.js');
 exports.create_a_user = function(req, res){
     var new_user  = new User(req.body);
 
+    console.log(new_user);
     //handles null error
      if(!new_user.eMail ){
               res.status(400).send({ error:true, message: 'Please provide task/status' });
@@ -37,6 +38,20 @@ exports.get_all_users = function(req, res){
     //   });
 
 }
+
+
+exports.get_user_by_id = function(req, res){
+  User.GetUserById(req.params.id, function(err,task){
+
+    // console.log(task);
+          if(err)
+          res.send(err);
+          // console.log('res', task);
+      res.send(task);
+  });
+}
+
+
 
 
 // res.send(uuid.v4());
