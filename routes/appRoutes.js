@@ -4,11 +4,15 @@ module.exports = function(app) {
   var cf = require('../controllers/categoryFeaturesController');
   var pr = require('../controllers/productController');
   var us = require('../controllers/usersController');
+  var auth = require('../controllers/authController');
 
-  // Categories Routes
+  // Main Categories Routes
   app.route('/categories')
-    .get(cats.list_all_categories)
+    .get(cats.list_main_categories)
     .post(cats.create_a_category);
+
+    app.route('/subCategories')
+      .get(cats.list_sub_categories);
    
    app.route('/categories/:taskId')
     // TODO // .get(cats.read_a_task) // getProductsByCategoryId
@@ -33,10 +37,13 @@ module.exports = function(app) {
       .post(pr.create_a_product);
       // putUpdateProduct
 
-    //ProductById
+    //getProductsBySubCategory
     app.route('/products/:productId')
       .get(pr.list_products_by_category_id);
 
+
+    app.route('/productDetail/:productId')
+      .get(pr.get_product_detail_by_id);
     //getUserDetail
     //createUser
     //listUsers
@@ -49,6 +56,10 @@ module.exports = function(app) {
 
     app.route('/users')
       .get(us.get_all_users);
+
+
+    app.route('/auth/:un/:pw')
+      .get(auth.login);
 
 
 

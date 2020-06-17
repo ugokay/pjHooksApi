@@ -2,15 +2,22 @@
 
 var Category = require('../models/categoryModel.js');
 
-exports.list_all_categories = function(req, res) {
+exports.list_main_categories = function(req, res) {
     Category.getAllCategories(function(err, task) {
 
-    console.log('controller')
     if (err)
       res.send(err);
-      console.log('res', task);
     res.send(task);
   });
+};
+
+exports.list_sub_categories = function(req, res) {
+  Category.getAllSubCategories(function(err, task) {
+
+  if (err)
+    res.send(err);
+  res.send(task);
+});
 };
 
 exports.list_sub_categories_by_id = function(req, res){

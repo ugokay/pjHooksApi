@@ -7,6 +7,7 @@ var Product = function(pr){
     this.relatedCategoryId = pr.relatedCategoryId;
     this.picture = pr.picture;
     this.productFeatures = pr.productFeatures;
+    this.productTypes = pr.productTypes;
     this.quantity = pr.quantity;
     this.price = pr.price;
     this.status = pr.status;
@@ -56,6 +57,31 @@ var Product = function(pr){
         }); 
 
     }
+
+    Product.getProductDetailById = function(req,result){
+        sql.query("SELECT * FROM product where id = ?", [req], function(err,res){
+        // sql.query(
+        //     `SELECT * FROM product as p 
+        //     JOIN productSub as ps ON p.id=ps.relatedProductId
+        //     WHERE p.id ?` , [req], function(err,res){
+                if(err) {
+                    console.log("error: ", err);
+                    result(null, err);
+                }
+                else{
+                 result(null, res);
+                }
+            });
+            
+            
+            
+
+
+
+
+
+        // });
+    } 
     
 
 module.exports = Product;

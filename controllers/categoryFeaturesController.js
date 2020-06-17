@@ -6,10 +6,8 @@ var CategoryFeature = require('../models/categoryFeaturesModel.js');
 exports.list_all_category_features = function(req, res) {
     CategoryFeature.getAllCategoryFeatures(function(err, task) {
 
-    console.log('controller')
     if (err)
       res.send(err);
-      console.log('res', task);
     res.send(task);
   });
 };
