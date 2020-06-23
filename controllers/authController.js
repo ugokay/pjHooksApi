@@ -8,6 +8,7 @@ exports.login = function(req,res){
             res.send(err);
         if(id.length == 0){
             res.sendStatus(401)
+            // res.send(err)
         }else{
             res.json(id);
         }

@@ -9,8 +9,8 @@ var Auth = function(auth){
 
 
 Auth.login = function(un, pw, result){
-    // console.log(pw);
-    sql.query("SELECT id FROM user Where email = ? AND password = ? AND status = 1", [un,pw], function(err,res) {
+
+    sql.query("SELECT id FROM user Where phoneNumber = ? AND password = ? AND status = 1", [un,pw], function(err,res) {
             if(err) {
             // console.log("error: ", err);
                 result(null, err);

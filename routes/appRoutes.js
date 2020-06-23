@@ -4,9 +4,12 @@ module.exports = function(app) {
   var cf = require('../controllers/categoryFeaturesController');
   var pr = require('../controllers/productController');
   var us = require('../controllers/usersController');
+  var or = require('../controllers/orderController');
   var auth = require('../controllers/authController');
 
   // Main Categories Routes
+
+
   app.route('/categories')
     .get(cats.list_main_categories)
     .post(cats.create_a_category);
@@ -58,8 +61,22 @@ module.exports = function(app) {
       .get(us.get_all_users);
 
 
+
+    app.route('/order')
+      .post(or.addNewOrder)
+      .get(or.getPendingOrders)
+
+
+    app.route('/orders/:id')
+      .get(or.listOrdersByUserId)
+
+
+
+    // AUTH
     app.route('/auth/:un/:pw')
       .get(auth.login);
+
+
 
 
 

@@ -27,8 +27,8 @@ Category.createCategory = function (cat, result) {
 };
 
 Category.getAllCategories = function (result) {
-    sql.query("Select * from category WHERE status = 1 AND mainCategoryId= 0 ", function (err, res) {
-
+    sql.query("Select * from category WHERE status = 1 AND mainCategoryId= 0  ORDER by categoryOrder ASC, createTime DESC ", 
+    function (err, res) {
             if(err) {
                 console.log("error: ", err);
                 result(null, err);
@@ -56,7 +56,7 @@ Category.getAllSubCategories = function (result) {
 }
 
 Category.getSubCategories = function (id, result){
-    sql.query("SELECT * from category WHERE mainCategoryId = ?", [id], function (err,res){
+    sql.query("SELECT * from category WHERE mainCategoryId = ? ORDER by categoryOrder ASC, createTime DESC", [id], function (err,res){
 
         if(err) {
             console.log("error: ", err);
