@@ -44,7 +44,7 @@ Order.getPendingOrders = function(result){
         `SELECT co.*,u.name FROM customerOrder as co 
 JOIN user as u
 on u.id = co.userId
-WHERE co.orderType = 1 
+WHERE co.orderType = 1
 ORDER BY co.createTime DESC`
         // "SELECT * from customerOrder Where orderType= 'PENDING' ORDER by createTime DESC"
     , function (err,res){
