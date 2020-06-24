@@ -64,6 +64,28 @@ ORDER BY co.createTime DESC`
 }
 
 
+Order.updateOrder = function(id, order, result){
+    sql.query("UPDATE customerOrder SET orderType = 2 , orderDetail = ? WHERE id = ?", [order.orderDetail, id], function(err,res){
+        if(err) {
+            console.log("error: ", err);
+                result(null, err);
+            }
+            else{   
+            result(null, res);
+                }
+        }); 
+}
+
+
+// UPDATE `customerOrder` 
+// SET 
+//   orderDetail ='A',
+//   orderType =2 
+// WHERE 
+//   id = '1212'
+
+
+
 // Order.updateOrder
 
 // For Admin

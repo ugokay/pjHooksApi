@@ -1,5 +1,6 @@
 'use strict';
 var sql = require('../db.js');
+var uuid =require('uuid');
 
 var Product = function(pr){
     this.productName = pr.productName;
@@ -14,6 +15,8 @@ var Product = function(pr){
 };
 
     Product.createProduct = function (pr, result){
+        pr.id = uuid.v4();
+        // pr.id= pr.id.trim();
 
         sql.query("INSERT INTO product set ?", pr, function (err, res) {
             if(err) {
@@ -59,7 +62,8 @@ var Product = function(pr){
     }
 
     Product.getProductDetailById = function(req,result){
-        sql.query("SELECT * FROM product where id = ?", [req], function(err,res){
+
+        sql.query("SELECT * FROM product where id = ?", [req.trim()], function(err,res){
         // sql.query(
         //     `SELECT * FROM product as p 
         //     JOIN productSub as ps ON p.id=ps.relatedProductId

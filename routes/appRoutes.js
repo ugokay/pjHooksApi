@@ -69,6 +69,7 @@ module.exports = function(app) {
 
     app.route('/orders/:id')
       .get(or.listOrdersByUserId)
+      .put(or.updateOrder)
 
 
 
