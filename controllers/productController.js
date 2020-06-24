@@ -48,6 +48,23 @@ exports.list_products_by_category_id = function(req,res){
 
 exports.get_product_detail_by_id = function (req,res){
   Product.getProductDetailById(req.params.productId, function(err, product){
+
+      product.map((n) => {
+        let features = JSON.parse(n.productTypes)
+        console.log( features)
+        let pTypes = []
+        features.map((element) => {
+          element.quantity = [];
+          //prepare quantity selection
+          for(let i= 0; i <= element.quota ; i++){
+            element.quantity.push({'value': i})
+          }
+          pTypes.push(element)
+          n.productTypes = JSON.stringify(pTypes)
+        })
+        return n
+      })
+
       if(err)
        res.send(err)
        res.json(product)
