@@ -28,15 +28,6 @@ exports.get_all_users = function(req, res){
         res.send(usr);
 
     });
-    // CategoryFeature.getAllCategoryFeatures(function(err, task) {
-
-    //     console.log('controller')
-    //     if (err)
-    //       res.send(err);
-    //       console.log('res', task);
-    //     res.send(task);
-    //   });
-
 }
 
 
@@ -49,6 +40,14 @@ exports.get_user_by_id = function(req, res){
           // console.log('res', task);
       res.send(task);
   });
+}
+
+exports.update_last_online_of_user = function(req,res){
+  User.UpdateLastOnlineByUserId(req.params.id, new User(req.body), function(err,user){
+    if(err)
+      res.send(err)
+    res.json(user)
+  })
 }
 
 

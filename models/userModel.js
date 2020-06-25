@@ -12,6 +12,8 @@ var User = function (usr){
     this.password = usr.password;
     this.phoneNumber = usr.phoneNumber;
     this.status = usr.status;
+    this.passwordAttempt = usr.passwordAttempt;
+    this.lastOnlineRand = usr.lastOnlineRand;
 };
 
 User.createUser = function(usr, result){
@@ -43,13 +45,8 @@ User.getAllUSers = function(result){
     });  
 }
 
-
-
-
 User.GetUserById = function(id,result){
-
     sql.query("SELECT * FROM user where id = ?", id, function(err,res){
-
         if(err) {
             console.log("error: ", err);
             result(null, err);
@@ -59,6 +56,21 @@ User.GetUserById = function(id,result){
             // console.log(res);
         }
     })
+};
+
+User.UpdateLastOnlineByUserId = function(id, task, result){
+    let t = parseInt(Math.random()*100)
+    sql.query("UPDATE user SET lastOnlineRand = ? WHERE id = ?", [t,id], function (err, res) {
+        if(err) {
+            console.log("error: ", err);
+                result(null, err);
+            }
+            else{   
+                console.log(res)
+            result(null, res);
+                }
+            }); 
+
 };
 
 

@@ -1,7 +1,7 @@
 'use strict';
 module.exports = function(app) {
   var cats = require('../controllers/categoryController');
-  var cf = require('../controllers/categoryFeaturesController');
+  // var cf = require('../controllers/categoryFeaturesController');
   var pr = require('../controllers/productController');
   var us = require('../controllers/usersController');
   var or = require('../controllers/orderController');
@@ -26,9 +26,9 @@ module.exports = function(app) {
 
 
     // Categories Features Routes
-    app.route('/categoriesFeatures')
-      .get(cf.list_all_category_features)
-      .post(cf.create_a_category_feature); 
+    // app.route('/categoriesFeatures')
+    //   .get(cf.list_all_category_features)
+    //   .post(cf.create_a_category_feature); 
     
 
 
@@ -56,9 +56,14 @@ module.exports = function(app) {
 
     app.route('/user/:id')
       .get(us.get_user_by_id);
+      
 
     app.route('/users')
       .get(us.get_all_users);
+
+    //updateLastOnlineOfUSer
+    app.route('/lastOnline/:id')
+      .put(us.update_last_online_of_user)
 
 
 
