@@ -46,7 +46,7 @@ User.getAllUSers = function(result){
 }
 
 User.GetUserById = function(id,result){
-    sql.query("SELECT * FROM user where id = ?", id, function(err,res){
+    sql.query("SELECT id,name,surname,countryCode,eMail,phoneNumber,status FROM user where id = ?", id, function(err,res){
         if(err) {
             console.log("error: ", err);
             result(null, err);
