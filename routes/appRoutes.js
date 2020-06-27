@@ -6,7 +6,7 @@ module.exports = function(app) {
   var us = require('../controllers/usersController');
   var or = require('../controllers/orderController');
   var auth = require('../controllers/authController');
-
+  var nw = require('../controllers/newsController');
   // Main Categories Routes
 
 
@@ -84,6 +84,9 @@ module.exports = function(app) {
       .get(auth.login);
 
 
+    app.route('/news')
+      .get(nw.list_news)
+      .post(nw.add_news);
 
 
 
