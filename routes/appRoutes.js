@@ -42,7 +42,8 @@ module.exports = function(app) {
 
     //getProductsBySubCategory
     app.route('/products/:productId')
-      .get(pr.list_products_by_category_id);
+      .get(pr.list_products_by_category_id)
+      .put(pr.update_product_info);
 
 
     app.route('/productDetail/:productId')

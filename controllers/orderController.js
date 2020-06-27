@@ -2,6 +2,10 @@
 var express = require('express');
 var router = express.Router();
 var app = express();
+const fetch = require("node-fetch");
+const http = require('http');
+const axios = require('axios');
+
 
 var Order = require('../models/orderModel.js')
 var Product = require('../models/productsModel.js')
@@ -22,14 +26,104 @@ exports.addNewOrder = function(req,res){
 }
 
 exports.getPendingOrders = function(req,res){
-    
     Order.getPendingOrders(function(err, usr){
         if(err)
             res.send(err);
-            console.log('res', usr);
+            // // let swappedQuotaOrders = swappendingOrdersRealQuota(usr)
+        // console.log(swappedQuotaOrders)
+        let all= '';
+        usr.map(updatedNode=> {
+            let pends = JSON.parse(updatedNode.orderDetail)
+    
+        pends.map(orderProduct=> {
+            axios.get('http://localhost:3001/productDetail/'+orderProduct.id)
+              .then(function (response) {
+    
+                let dbProd = response.data[0]
+                let pTypes = JSON.parse(dbProd.productTypes)
+
+                orderProduct.productTypes.map(opt => {
+                    pTypes.map(node => {
+                        if(node.id == opt.id){
+                            console.log('///')
+                            // console.log(opt)
+                            console.log('///')
+                            // delete opt['quantity']
+                            // delete node['quantity']
+                            // console.log(node.quota)
+                            opt.dbStockQuota = node.quota
+                            
+                        }
+                        console.log(opt)
+                    }) 
+                    // orderProduct.productTypesNew = opt
+                })
+                
+                console.log(orderProduct.productTypes)
+
+              })
+              .catch(function (error) {
+                console.log(error);
+              })
+              .then(function () {
+                // always executed
+              }); 
+              updatedNode.newPends= pends
+        })
+        console.log(updatedNode)
+
+        // res.send(updatedNode);
+        
+        // console.log('\n\n\n\n\n\n')
+        // console.log(updatedNode)
+        // console.log('\n\n\n\n\n\n')
+
+        // all = usr
+    })
         res.send(usr);
     });
 }
+
+const swappendingOrdersRealQuota = (pendingOrders) => {
+
+    pendingOrders.map(updatedNode=> {
+        let pends = JSON.parse(updatedNode.orderDetail)
+
+    pends.map(orderProduct=> {
+        axios.get('http://localhost:3001/productDetail/'+orderProduct.id)
+          .then(function (response) {
+
+            let dbProd = response.data[0]
+            let pTypes = JSON.parse(dbProd.productTypes)
+
+            console.log(pTypes)
+             
+            orderProduct.productTypes.map(opt => {
+                pTypes.map(node => {
+                    if(node.id == opt.id){
+                        delete opt['quantity']
+                        delete node['quantity']
+                        opt.quota = node.quota
+                    }
+
+                }) 
+            })
+          })
+          .catch(function (error) {
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          }); 
+        
+    })
+})
+
+
+return pendingOrders;
+
+}
+
 
 exports.listOrdersByUserId = function(req,res){
     Order.listOrderOfUser(req.params.id, function(err,ords){
@@ -43,9 +137,66 @@ exports.listOrdersByUserId = function(req,res){
 
 exports.updateOrder = function(req,res){
 
-    // const pid = [{"productTypes":[{"id":1,"productType":"S-M","productTotalPrice":"15","productSubPiece":"2","quota":"6","value":"0","quantity":[{"value":0},{"value":1},{"value":2},{"value":3},{"value":4},{"value":5},{"value":6}]}],"id":"affd65d6-805c-4f52-ba6b-4f430b14c77a","productName":"KTS-13","productName_ru":"KTS-13 RU","picture":"https://sky-static.mavi.com/sys-master/maviTrImages/hfd/ha8/9164674859038"},{"productTypes":[{"id":1,"productType":"S-M","productTotalPrice":"12","productSubPiece":"2","quota":"6","value":"6","quantity":[{"value":0},{"value":1},{"value":2},{"value":3},{"value":4},{"value":5},{"value":6}]},{"id":2,"productType":"S-M-L","productTotalPrice":"14","productSubPiece":"3","quota":"5","value":"3","quantity":[{"value":0},{"value":1},{"value":2},{"value":3},{"value":4},{"value":5}]}],"id":"21fe6efe-9cc5-4abe-a2d0-3627a99d49d6","productName":"2","productName_ru":"3","picture":"https://fns.modanisa.com/r/pro2/2019/09/19/u-spor-ayakkabi--beyaz--pembe-potin-1264791-1264791-1.jpg"}]
     // maintainProducts(pid);
+    const obj = JSON.parse(req.body.orderDetail)
+    console.log(obj)
     // res.json(req.body)
+
+    obj.map(p =>{
+        // updateProductsQuota(p)
+        http.get('http://localhost:3001/productDetail/'+p.id, (datt) => {
+
+            datt.on('data', (d) => {
+                let pd = JSON.parse(d)
+                let pdT = JSON.parse(pd[0].productTypes)
+
+
+                let totalQuota = 0
+                p.productTypes.map(updatedNode=> {
+                    pdT.map(dbProd => {
+                        if(updatedNode.id == dbProd.id){
+                        // console.log('----')
+                        // console.log(dbProd.quota)
+                        // TODO burasını hep dbden çekmemiz gerekiyor
+                        delete dbProd['quantity']
+                        dbProd.quota = parseInt(dbProd.quota) - parseInt(updatedNode.value)
+                        totalQuota += dbProd.quota;
+                        // console.log(dbProd.quota)
+                        // console.log('----')
+                    }
+                })
+            })
+
+
+            const data = {
+                productTypes: JSON.stringify(pdT),
+                quantity : totalQuota
+            };
+            
+            axios.put('http://localhost:3001/products/'+ p.id, data)
+                .then((res) => {
+                    console.log(`Status: ${res.status}`);
+                    console.log('Body: ', res.data);
+                }).catch((err) => {
+                    console.error(err);
+                });
+        
+         
+            
+            // res.json('reS')
+
+            // console.log('\n\n\n\n')
+            // console.log(JSON.stringify(pdT))
+            // console.log('\n\n\n\n')
+
+
+            });
+            }).on('error', (e) => {
+                console.error('ERROR',e);
+            });
+
+        
+    })
 
 
     Order.updateOrder(req.params.id, new Order(req.body), function(err,task){
@@ -55,94 +206,131 @@ exports.updateOrder = function(req,res){
     });
 };
 
-const maintainProducts = (products) => {
-    // const realProduct = JSON.parse('[{"productTypes":[{"id":1,"productType":"S-M-LA","productTotalPrice":"35","quota":5,"productSubPiece":3,"value":"1","quantity":[{"value":"1"},{"value":"2"},{"value":"3"},{"value":"4"},{"value":"5"}]},{"id":2,"productType":"S-M","productTotalPrice":"75","quota":3,"productSubPiece":2,"value":"3","quantity":[{"value":"1"},{"value":"2"},{"value":"3"}]}],"id":"ef30bfc8-b547-11ea-b3de-0242ac130004","productName":"Wedding Suit 2","productName_ru":"Wedding Suit 2 Ru","picture":"https://firebasestorage.googleapis.com/v0/b/justeweb-38952.appspot.com/o/suits%2Fwedding%2Fwedding6.jpeg?alt=media&token=605c4728-b549-477a-94bc-c82c46759cf6"},{"productTypes":[{"id":1,"productType":"S-M-LA","productTotalPrice":"35","quota":5,"productSubPiece":3,"value":"4","quantity":[{"value":"1"},{"value":"2"},{"value":"3"},{"value":"4"},{"value":"5"}]},{"id":2,"productType":"S-M","productTotalPrice":"75","quota":3,"productSubPiece":2,"value":"","quantity":[{"value":"1"},{"value":"2"},{"value":"3"}]}],"id":"ef30c0ae-b547-11ea-b3de-0242ac130004","productName":"Wedding Suit 1","productName_ru":"Wedding Suit 1 Ru","picture":"https://firebasestorage.googleapis.com/v0/b/justeweb-38952.appspot.com/o/suits%2Fwedding%2Fwedding1.jpeg?alt=media&token=c05e27a5-532f-467a-ac3d-608f9b1f783e"}]')
-    // products = JSON.parse(products)
+
+const updateProductsQuota = (product) => {
+
+    // console.log(product.id)
+
+    http.get('http://localhost:3001/productDetail/'+product.id, (res) => {
+            //   console.log('statusCode:', res.statusCode);
+            //   console.log('headers:', res.headers);
+
+    
+            res.on('data', (d) => {
+                // console.log('(/////')
+                let pd = JSON.parse(d)
 
 
 
-    // console.log(router)
-    // pr.get_product_detail_by_id(':21fe6efe-9cc5-4abe-a2d0-3627a99d49d6').then(a=>{
 
-    // console.log(typeof products)
-    // TODO  IDleri çekip quota düşürme işlemi yapılacak
-    products.map(p =>{
-        // console.log(p)
-        p.productTypes.map(pT =>{
-            delete pT['quantity']
-            // console.log(pT)
-
-            // router.put('/productDetail/21fe6efe-9cc5-4abe-a2d0-3627a99d49d6', function(req, res) {
-            //     console.log('here');
-            //     console.log(JSON.parse(res));
-            //    // updateSomething(req.params.withParam)
-            //    // .then(function() { res.send(200, 'ok'); });
-            // });
-
-
-        })
-console.log(p)
-
-
-    })
-
-    // console.log('1///////')
-    // console.log(JSON.stringify(prs));
-    // console.log('///////1')
-
-    // realProduct.map(p => {
-    //     products.forEach((item) => {
-
-    //         //TODO decrement increment quota
-    //         // and uodate other field too sumup
-    //         // console.log('////')
-    //         // console.log(JSON.stringify(item))
-    //         // console.log('////')
-    //         // console.log('PID',p.id)
-    //         if(p.id == item.id){
-
-    //             console.log(p,item)
+                console.log('**********')
+                console.log('**********')
+                console.log('**********')
+                console.log(pd[0].productTypes)
+                console.log('**********')
+    console.log('**********')
+    console.log('**********')
 
 
 
-    //             if(p.productTypes.id == item.productTypes.id)
-    //                 console.log(item.productTypes.value)
-                        
+    pd[0] = product.productTypes;
 
 
-    //             console.log(typeof p.productTypes.id)
-    //             console.log('////')
-    //             console.log(typeof item.productTypes.id)
+                console.log(pd[0].productTypes)
+                console.log('**********')
+                console.log('**********')
+                console.log('**********')
+                // console.log(pd[0].productTypes)
+                // let parsed = pd.productTypes
+                // console.log(parsed)
+                // direk mergele
 
-    //             // console.log(p)
-    //             // console.log(item)
-    //             // p.productTypes.map(pT => {
-    //             //     item.forEach(prdT => {
-    //             //         console.log('PT',prdT)
-    //             //     })
-
-    //             //         // console.log(pT.id)
-    //             //         // console.log(prdT.id)
-    //             // // if(pT.id == prdT.id)
-    //             // //     pT.value = item.value
-    //             //     }) 
-    //             // })
 
                 
-    //         }
-    //     })
-
-    // }) 
-    // console.log('2///////')
-    // console.log(JSON.stringify(prs));
-    // console.log('///////2')
-
-        //TODO
-        //getProducts decrease / increase produtc QUOTA
-        // decrease increase ProductDetailItem Quota
-        // decrease increase Product Item QUANTIY !!!!
+              });
 
 
+            }).on('error', (e) => {
+                console.error('ERROR',e);
+            });
+                // console.log(typeof )
+                // let pTypes = 
 
-    // console.log('ASsad',prs)
+                // console.log(JSON.stringify(product))
+                // console.log('//////')
+                // console.log('//////')
+                // console.log('//////')
+                // console.log('//////')
+                // console.log('//////')
+                // console.log(JSON.stringify(pd))
+                // console.log('A')
+
+                // product.productTypes.map(p=> {
+                //     pd[0].map(newQuotad =>{
+                //         console.log(newQuotad.productType)
+                //         console.log('//////')
+                //         console.log('//////')
+                //         console.log('//////')
+                //         console.log('//////')
+                //         // console.log(newQuotad)
+                //         console.log('//////')
+                //         console.log('//////')
+                //         console.log('//////')
+                //         console.log('//////')
+                //         console.log('//////')
+
+                //         // console.log(newQuotad.id, p.id)
+                //         // if(newQuotad.id == p.id)
+                //         //     console.log(p.productType, newQuotad.productType)
+
+                //     })
+                // })
+                // console.log('fin')
+
+                // pd.map(updated => {
+                //     product.forEach((prod) => {
+                //         if(updated.id == prod.id)
+                //             console.log(prod.productType, updated.productType)
+
+                //     })
+
+                // })
+
+                    // console.log(JSON.stringify(pd))
+                    // console.log('////////')
+                    // console.log('////////')
+                    // console.log('////////')
+                    // console.log('////////')
+                    // console.log('////////')
+                    // console.log('////////')
+                    // console.log(JSON.stringify(product))
+
+                    
+                //     pd.map(rP => {
+                //     if(product.id == rP.id)
+                //         console.log('VAR')
+                //         // console.log(product, rP)
+                //     else 
+                //         console.log('YOK')
+                // })
+                
+                // console.log(JSON.parse(d))
+
+
+                // console.log('(/////')
+                // process.stdout.write(d);
+
+
+
 }
+
+
+
+
+const maintainProducts = (products) => {
+    products.map(p =>{
+        updateProductsQuota(p)
+    })
+}
+
+      

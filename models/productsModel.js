@@ -86,6 +86,21 @@ var Product = function(pr){
 
         // });
     } 
+
+
+    Product.updateProductById = function(id,product,result) {
+        sql.query("UPDATE product SET productTypes = ?, quantity = ? WHERE id = ?",[product.productTypes, product.quantity,id], function(err,res){
+
+            if(err) {
+                console.log("error: ", err);
+                    result(null, err);
+                }
+                else{   
+                result(null, res);
+                    }
+        });
+    }
+
     
 
 module.exports = Product;

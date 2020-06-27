@@ -51,7 +51,7 @@ exports.get_product_detail_by_id = function (req,res){
 
       product.map((n) => {
         let features = JSON.parse(n.productTypes)
-        console.log( features)
+        // console.log( features)
         let pTypes = []
         features.map((element) => {
           element.quantity = [];
@@ -70,4 +70,15 @@ exports.get_product_detail_by_id = function (req,res){
        res.json(product)
 
   })
+}
+
+exports.update_product_info = function(req,res){
+  console.log('PRODUCT INFORMATION')
+  Product.updateProductById(req.params.productId, new Product(req.body), function(err,product){
+      if (err)
+        res.send(err);
+      res.json(product);
+  });
+  // console.log(req.params);
+  // console.log(req.body);
 }
