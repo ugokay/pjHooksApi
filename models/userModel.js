@@ -11,6 +11,7 @@ var User = function (usr){
     this.eMail = usr.eMail;
     this.password = usr.password;
     this.phoneNumber = usr.phoneNumber;
+    this.location = usr.location;
     this.status = usr.status;
     this.passwordAttempt = usr.passwordAttempt;
     this.lastOnlineRand = usr.lastOnlineRand;
@@ -19,6 +20,8 @@ var User = function (usr){
 User.createUser = function(usr, result){
     // this.id = uuid.v4();
     usr.id = uuid.v4();
+    usr.passwordAttempt = 0;
+    usr.lastOnlineRand = 0;
     sql.query("INSERT INTO  user set ? ", usr, function(err, res){
         if(err) {
             console.log("error: ", err);
