@@ -9,7 +9,7 @@ exports.list_all_products = function(req,res){
         console.log('controller')
         if (err)
           res.send(err);
-          console.log('res', task);
+          // console.log('res', task);
         res.send(task);
       });
 

@@ -48,7 +48,7 @@ var Product = function(pr){
     Product.getProductsByCatId = function(req,result){
 
         // result(req);
-        sql.query("SELECT * FROM product WHERE relatedCategoryId = ? ORDER by createTime DESC", [req], function (err, res) {
+        sql.query("SELECT * FROM product WHERE relatedCategoryId = ? AND quantity > 0 ORDER by createTime DESC", [req], function (err, res) {
           
             if(err) {
                 console.log("error: ", err);

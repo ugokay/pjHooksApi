@@ -5,6 +5,10 @@ const express = require('express'),
 
   var mysql = require('mysql')
 
+
+
+
+
 // TODO 
 // 1.Authentication dotnetEnv
 // 2.category.UPDATE
@@ -25,6 +29,23 @@ connection.connect(function(err) {
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+
+
+
+const multer = require('multer');
+const upload = multer({dest: __dirname + '/uploads/images'});
+app.use(express.static('public'));
+app.post('/upload', upload.single('file'), (req, res) => {
+  // console.log(req.body)
+  // console.log('///')
+  // console.log(req.file)
+  // console.log('///')
+    if(req.file) {
+        res.json(req.file);
+    }
+    else throw res.body;
+});
+
 
 var routes = require('./routes/appRoutes'); //importing route
 routes(app); //register the route
